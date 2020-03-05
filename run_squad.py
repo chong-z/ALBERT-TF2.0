@@ -562,9 +562,10 @@ def predict_squad_customized(strategy, input_meta_data, albert_config,
     all_results = []
     for _ in range(num_steps):
         predictions = predict_step(predict_iterator)
+        get_raw_results_func = get_raw_results
         if FLAGS.version_2_with_negative:
-            get_raw_results = get_raw_results_v2
-        for result in get_raw_results(predictions):
+            get_raw_results_func = get_raw_results_v2
+        for result in get_raw_results_func(predictions):
             all_results.append(result)
         if len(all_results) % 100 == 0:
             logging.info('Made predictions for %d records.', len(all_results))
